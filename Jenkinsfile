@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS')
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     tools {
@@ -26,27 +27,24 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("spring-petclinic:latest")
-
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDENTIALS) {
-                        dockerImage.push()
-                    }
+                    sh '''
+                    echo 'Build Docker Image'
+                    docker build -t irfan779/spring-petclinic:${BUILD_NUMBER} .
+                    '''
                 }
             }
         }
 
-        stage('Containerize Application') {
+        stage('Push the artifacts') {
             steps {
                 script {
-                    def dockerImage = docker.image("spring-petclinic:latest")
-                    
-                    // Build and run Docker container based on the Dockerfile
-                    dockerImage.inside("-p 8080:8080") {
-                        sh 'docker build -t spring-petclinic:latest .'
-                        sh 'docker run -d -p 8080:8080 spring-petclinic:latest'
-                    }
+                    sh '''
+                    echo 'Push to repo'
+                    docker push irfan779/spring-petclinic:${BUILD_NUMBER} 
+                    '''
                 }
             }
         }
+
     }
 }
