@@ -7,6 +7,8 @@ pipeline {
     }
 
     tools {
+        // Reference Docker tool configured in Global Tool Configuration
+        docker 'Docker'
         maven 'Maven'
     }
 
