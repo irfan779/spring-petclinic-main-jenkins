@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS')
+        PATH = "/opt/homebrew/bin/docker"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
