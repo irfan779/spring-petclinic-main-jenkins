@@ -20,6 +20,7 @@ pipeline {
             steps {
                 sh 'java --version'
                 sh 'mvn clean install -DskipTests=true'
+                sh 'docker images'
             }
         }
 
